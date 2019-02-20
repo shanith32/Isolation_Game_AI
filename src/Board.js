@@ -3,26 +3,23 @@ import Square from "./Square";
 import "./Board.css";
 
 class Board extends Component {
-  renderSquare(i) {
+  renderSquare(row, col) {
+    // console.log(`Row: ${row} Col: ${col} Key: ${row * 2 + col * 3}`);
     return (
       <Square
-        key={i}
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        key={row * 2 + col * 3}
+        value={this.props.squares[row][col]}
+        onClick={() => this.props.onClick(row, col)}
       />
     );
   }
 
   createBoard() {
     let board = [];
-    let count = 0;
-
     for (let i = 0; i < 3; i++) {
       let squares = [];
-      for (let j = 0; j < 3; j++) {
-        squares.push(this.renderSquare(count));
-        count += 1;
-      }
+      for (let j = 0; j < 3; j++) squares.push(this.renderSquare(i, j));
+
       board.push(
         <div key={i} className="board-row">
           {squares}
