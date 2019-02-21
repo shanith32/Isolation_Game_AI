@@ -40,16 +40,27 @@ class Game extends Component {
   }
 
   // Function to check if the move is a legal move
-  checkMoveLegal(row, col) {
-    // Check if the move is legal
+  checkIfMoveLegal(row, col) {
+    console.log(row + col);
+    const playerLocation = this.state.p1IsNext
+      ? this.state.p1Location
+      : this.state.p2Location;
+
+    const moves = [[playerLocation.row + 2, playerLocation.col - 1]];
+    const [[a, b]] = moves;
+    if (row == a && col == b) return;
+    else this.checkIfMoveLegal(row, col);
   }
 
+  // Function to handle the click on a square
   handleClick(row, col) {
     const { squares } = this.state;
     const { p1Location } = this.state;
     const { p2Location } = this.state;
 
     if (this.calculateWinner(squares) || squares[row][col]) return;
+
+    // this.checkIfMoveLegal(row, col);
 
     console.log(
       `Before: p1 => ${this.state.p1Location} p2 => ${this.state.p2Location}`

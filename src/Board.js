@@ -4,7 +4,6 @@ import "./Board.css";
 
 class Board extends Component {
   renderSquare(row, col) {
-    // console.log(`Row: ${row} Col: ${col} Key: ${Math.random()}`);
     return (
       <Square
         key={Math.random()}
