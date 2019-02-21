@@ -4,10 +4,10 @@ import "./Board.css";
 
 class Board extends Component {
   renderSquare(row, col) {
-    // console.log(`Row: ${row} Col: ${col} Key: ${row * 2 + col * 3}`);
+    // console.log(`Row: ${row} Col: ${col} Key: ${Math.random()}`);
     return (
       <Square
-        key={row * 2 + col * 3}
+        key={Math.random()}
         value={this.props.squares[row][col]}
         onClick={() => this.props.onClick(row, col)}
       />
@@ -16,9 +16,9 @@ class Board extends Component {
 
   createBoard() {
     let board = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 7; i++) {
       let squares = [];
-      for (let j = 0; j < 3; j++) squares.push(this.renderSquare(i, j));
+      for (let j = 0; j < 7; j++) squares.push(this.renderSquare(i, j));
 
       board.push(
         <div key={i} className="board-row">
