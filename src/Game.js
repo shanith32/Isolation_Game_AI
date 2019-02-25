@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Board from "./Board";
 import "./Game.css";
+import { isNull } from "util";
 
 class Game extends Component {
   constructor(props) {
@@ -41,15 +42,29 @@ class Game extends Component {
 
   // Function to check if the move is a legal move
   checkIfMoveLegal(row, col) {
-    console.log(row + col);
     const playerLocation = this.state.p1IsNext
       ? this.state.p1Location
       : this.state.p2Location;
 
-    const moves = [[playerLocation.row + 2, playerLocation.col - 1]];
-    const [[a, b]] = moves;
-    if (row == a && col == b) return;
-    else this.checkIfMoveLegal(row, col);
+    if (isNull(playerLocation.row) && isNull(playerLocation.col)) return false;
+
+    const moves = [
+      [playerLocation.row + 2, playerLocation.col + 1],
+      [playerLocation.row + 2, playerLocation.col - 1],
+      [playerLocation.row - 2, playerLocation.col + 1],
+      [playerLocation.row - 2, playerLocation.col - 1],
+      [playerLocation.row + 1, playerLocation.col - 2],
+      [playerLocation.row - 1, playerLocation.col - 2],
+      [playerLocation.row + 1, playerLocation.col + 2],
+      [playerLocation.row - 1, playerLocation.col + 2]
+    ];
+
+    for (let i = 0; i < moves.length; i++) {
+      const [a, b] = moves[i];
+      if (row === a && col === b) return false;
+    }
+
+    return true;
   }
 
   // Function to handle the click on a square
@@ -58,13 +73,12 @@ class Game extends Component {
     const { p1Location } = this.state;
     const { p2Location } = this.state;
 
-    if (this.calculateWinner(squares) || squares[row][col]) return;
-
-    // this.checkIfMoveLegal(row, col);
-
-    console.log(
-      `Before: p1 => ${this.state.p1Location} p2 => ${this.state.p2Location}`
-    );
+    if (
+      this.calculateWinner(squares) ||
+      squares[row][col] ||
+      this.checkIfMoveLegal(row, col)
+    )
+      return;
 
     if (this.state.p1IsNext) {
       squares[row][col] = "X";
@@ -87,14 +101,9 @@ class Game extends Component {
         p2Location: { row: row, col: col }
       });
     }
-
-    console.log(
-      `After: p1 => ${this.state.p1Location.row} p2 => ${this.state.p2Location}`
-    );
   }
 
   render() {
-    // console.log(this.state.squares);
     const winner = this.calculateWinner(this.state.squares);
 
     let status;
