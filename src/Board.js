@@ -4,11 +4,24 @@ import "./Board.css";
 
 class Board extends Component {
   renderSquare(row, col) {
+    let squareCssType = "oddSquare";
+    let squareValue = this.props.squares[row][col];
+
+    if (squareValue === "@") {
+      squareCssType = "usedSquare";
+      squareValue = null;
+    } else if (row % 2 === 0) {
+      if (col % 2 === 0) squareCssType = "evenSquare";
+    } else {
+      if (col % 2 !== 0) squareCssType = "evenSquare";
+    }
+
     return (
       <Square
         key={Math.random()}
-        value={this.props.squares[row][col]}
+        value={squareValue}
         onClick={() => this.props.onClick(row, col)}
+        squareColor={squareCssType}
       />
     );
   }

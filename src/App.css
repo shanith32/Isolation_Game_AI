@@ -1,9 +1,14 @@
-body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
+.App {
+  text-align: center;
 }
 
-ol,
-ul {
-  padding-left: 30px;
+.App-header {
+  background-image: linear-gradient(#d461df, #d34646);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 2vmin);
+  color: #ffffff;
 }

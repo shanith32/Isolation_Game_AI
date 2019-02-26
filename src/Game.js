@@ -54,8 +54,8 @@ class Game extends Component {
     console.log("IsAvailable: ", isAvailable[0], " ", isAvailable[1]);
     let result = false;
 
-    if (!isAvailable[0]) result = "O";
-    else if (!isAvailable[1]) result = "X";
+    if (!isAvailable[0]) result = "🐴";
+    else if (!isAvailable[1]) result = "🦄";
 
     return result;
   }
@@ -101,7 +101,7 @@ class Game extends Component {
       return;
 
     if (this.state.p1IsNext) {
-      squares[row][col] = "X";
+      squares[row][col] = "🦄";
       if (p1Location.row !== null && p1Location.col !== null)
         squares[p1Location.row][p1Location.col] = "@";
 
@@ -111,7 +111,7 @@ class Game extends Component {
         p1Location: { row: row, col: col }
       });
     } else {
-      squares[row][col] = "O";
+      squares[row][col] = "🐴";
       if (p2Location.row !== null && p2Location.col !== null)
         squares[p2Location.row][p2Location.col] = "@";
 
@@ -128,18 +128,19 @@ class Game extends Component {
 
     let status;
     if (winner) status = `Winner ${winner}`;
-    else status = `Next player: ${this.state.p1IsNext ? "X" : "O"}`;
+    else status = `${this.state.p1IsNext ? "🦄" : "🐴"}'s Turn`;
 
     return (
       <div className="game">
+        <div className="game-info">
+          <div className="game-name">The Isolation Game</div>
+          <div>{status}</div>
+        </div>
         <div className="game-board">
           <Board
             squares={this.state.squares}
             onClick={(row, col) => this.handleClick(row, col)}
           />
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
         </div>
       </div>
     );
