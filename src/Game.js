@@ -16,28 +16,48 @@ class Game extends Component {
     };
   }
 
-  calculateWinner(squares) {
-    const lines = [
-      [[0, 0], [0, 1], [0, 2]],
-      [[1, 0], [1, 1], [1, 2]],
-      [[2, 0], [2, 1], [2, 2]],
-      [[0, 0], [1, 0], [2, 0]],
-      [[0, 1], [1, 1], [2, 1]],
-      [[0, 2], [1, 2], [2, 2]],
-      [[0, 0], [1, 1], [2, 2]],
-      [[0, 2], [1, 1], [2, 0]]
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [[a, b], [c, d], [e, f]] = lines[i];
-      if (
-        squares[a][b] &&
-        squares[a][b] === squares[c][d] &&
-        squares[a][b] === squares[e][f]
-      ) {
-        return squares[a][b];
+  // Calculate the winner
+  calculateWinner() {
+    let playerLocation = this.state.p1Location;
+    let isAvailable = [0, 0];
+
+    if (
+      (isNull(this.state.p1Location.row) &&
+        isNull(this.state.p1Location.col)) ||
+      (isNull(this.state.p2Location.row) && isNull(this.state.p2Location.col))
+    )
+      return false;
+
+    for (let j = 0; j < 2; j++) {
+      const moves = [
+        [1, playerLocation.row + 2, playerLocation.col + 1],
+        [2, playerLocation.row + 2, playerLocation.col - 1],
+        [3, playerLocation.row - 2, playerLocation.col + 1],
+        [4, playerLocation.row - 2, playerLocation.col - 1],
+        [5, playerLocation.row + 1, playerLocation.col - 2],
+        [6, playerLocation.row - 1, playerLocation.col - 2],
+        [7, playerLocation.row + 1, playerLocation.col + 2],
+        [8, playerLocation.row - 1, playerLocation.col + 2]
+      ];
+
+      for (let i = 0; i < moves.length; i++) {
+        const [n, a, b] = moves[i];
+        if (a >= 0 && a < 7 && b >= 0 && b < 7) {
+          console.log("n => ", n, " a: ", a, " b: ", b);
+          if (isNull(this.state.squares[a][b])) isAvailable[j]++;
+        }
       }
+
+      playerLocation = this.state.p2Location;
     }
-    return null;
+
+    console.log("IsAvailable: ", isAvailable[0], " ", isAvailable[1]);
+    let result = false;
+
+    if (!isAvailable[0]) result = "O";
+    else if (!isAvailable[1]) result = "X";
+
+    return result;
   }
 
   // Function to check if the move is a legal move
@@ -74,7 +94,7 @@ class Game extends Component {
     const { p2Location } = this.state;
 
     if (
-      this.calculateWinner(squares) ||
+      this.calculateWinner() ||
       squares[row][col] ||
       this.checkIfMoveLegal(row, col)
     )
@@ -104,7 +124,7 @@ class Game extends Component {
   }
 
   render() {
-    const winner = this.calculateWinner(this.state.squares);
+    const winner = this.calculateWinner();
 
     let status;
     if (winner) status = `Winner ${winner}`;
