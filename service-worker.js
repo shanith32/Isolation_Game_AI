@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Isolation_Game_AI/precache-manifest.1240bc00e501ffdb9339e982413eaaa0.js"
+  "/Isolation_Game_AI/precache-manifest.13ce8015e0eb324c69b8794fe2c92b32.js"
 );
 
 workbox.clientsClaim();
