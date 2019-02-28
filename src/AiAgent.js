@@ -4,12 +4,6 @@ class AiAgent {
     let playerLocation = state.p1Location;
     let isAvailable = [0, 0];
 
-    // if (
-    //   (state.p1Location.row === null && state.p1Location.col) === null ||
-    //   (state.p2Location.row === null && state.p2Location.col === null)
-    // )
-    //   return false;
-
     for (let j = 0; j < 2; j++) {
       const moves = [
         [1, playerLocation.row + 2, playerLocation.col + 1],
@@ -37,7 +31,7 @@ class AiAgent {
 
   // Check if game over
   static checkGameOver(state) {
-    const availableMoves = countLegalMoves(state);
+    const availableMoves = this.countLegalMoves(state);
     let result = false;
 
     if (!availableMoves[0]) result = "🐴";
@@ -60,15 +54,6 @@ class AiAgent {
     let playerLocation = state.p1Location;
     let children = [];
 
-    // if (
-    //   (state.p1Location.row === null && state.p1Location.col) === null ||
-    //   (state.p2Location.row === null && state.p2Location.col === null)
-    // )
-    //   return false;
-
-    console.log(" 1 Original state");
-    console.log(state.squares);
-
     const moves = [
       [playerLocation.row + 2, playerLocation.col + 1],
       [playerLocation.row + 2, playerLocation.col - 1],
@@ -84,34 +69,40 @@ class AiAgent {
       const [a, b] = moves[i];
       if (a >= 0 && a < 7 && b >= 0 && b < 7) {
         if (state.squares[a][b] === null) {
-          console.log("a: ", a, " b: ", b);
+          let newState = {
+            squares: null,
+            p1Location: { row: null, col: null },
+            p2Location: { row: null, col: null }
+          };
 
-          let newSquares = state.squares.map(array => array.slice());
-          newSquares[0][0] = "@";
-          newSquares[a][b] = "X";
-          children.push(newSquares);
+          newState.squares = state.squares.map(array => array.slice());
+          newState.squares[playerLocation.row][playerLocation.col] = "@";
+          newState.squares[a][b] = "X";
+          newState.p1Location.row = a;
+          newState.p1Location.col = b;
+          children.push(newState);
         }
       }
     }
-
-    console.log(" 2 Original state");
-    console.log(state.squares);
 
     return children;
   }
 
   // Minimax search algorithm
-  minimax(currentState, depth, maximizingPlayer) {
-    if (depth == 0 || checkGameOver(currentState)) return SEF(currentState);
+  static minimax(currentState, depth, maximizingPlayer) {
+    if (depth == 0 || this.checkGameOver(currentState))
+      return this.SEF(currentState);
 
     // Get all the children states for the currentState
     const children = this.getChildren(currentState);
+    console.log("ALL CHILDREN");
+    console.log(children);
 
     if (maximizingPlayer) {
       let maxEvaluation = -Infinity;
 
       children.forEach(child => {
-        const evaluation = minimax(child, depth - 1, false);
+        const evaluation = this.minimax(child, depth - 1, false);
         maxEvaluation = Math.max(maxEvaluation, evaluation);
       });
       return maxEvaluation;
@@ -119,7 +110,7 @@ class AiAgent {
       let minEvaluation = Infinity;
 
       children.forEach(child => {
-        const evaluation = minimax(child, depth - 1, true);
+        const evaluation = this.minimax(child, depth - 1, true);
         minEvaluation = (minEvaluation, evaluation);
       });
       return minEvaluation;
@@ -131,15 +122,28 @@ class AiAgent {
 //
 // Test case
 const state = {
-  squares: Array(7)
-    .fill(null)
-    .map(() => Array(7).fill(null)),
-  p1Location: { row: null, col: null },
-  p2Location: { row: null, col: null }
+  squares: [
+    ["X", null, null, null, null, null, null],
+    [null, null, null, null, null, null, null],
+    [null, null, "O", null, null, null, null],
+    [null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null]
+  ],
+  p1Location: { row: 0, col: 0 },
+  p2Location: { row: 2, col: 2 }
 };
 
-console.log("First State: ", state.squares);
-console.log(AiAgent.getChildren(state));
+if (
+  (state.p1Location.row !== null && state.p1Location.col !== null) ||
+  (state.p2Location.row !== null && state.p2Location.col !== null)
+) {
+  console.log("Minimax result: ", AiAgent.minimax(state, 1, true));
+}
+
+// console.log("First State: ", state.squares);
+// console.log(AiAgent.getChildren(state));
 // console.log(AiAgent.SEF(state));
 
 // export default AiAgent;
