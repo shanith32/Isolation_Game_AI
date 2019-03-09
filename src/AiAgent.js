@@ -50,8 +50,10 @@ class AiAgent {
   }
 
   // Get the children of a state
-  static getChildren(state) {
-    let playerLocation = state.p1Location;
+  static getChildren(state, isPlayer1) {
+    let playerLocation;
+    if (isPlayer1) playerLocation = state.p1Location;
+    else playerLocation = state.p2Location;
     let children = [];
 
     const moves = [
@@ -69,18 +71,33 @@ class AiAgent {
       const [a, b] = moves[i];
       if (a >= 0 && a < 7 && b >= 0 && b < 7) {
         if (state.squares[a][b] === null) {
-          let newState = {
-            squares: null,
-            p1Location: { row: null, col: null },
-            p2Location: { row: null, col: null }
-          };
+          if (isPlayer1) {
+            let newState = {
+              squares: state.squares.map(array => array.slice()),
+              p1Location: { row: a, col: b },
+              p2Location: {
+                row: state.p2Location.row,
+                col: state.p2Location.col
+              }
+            };
 
-          newState.squares = state.squares.map(array => array.slice());
-          newState.squares[playerLocation.row][playerLocation.col] = "@";
-          newState.squares[a][b] = "X";
-          newState.p1Location.row = a;
-          newState.p1Location.col = b;
-          children.push(newState);
+            newState.squares[playerLocation.row][playerLocation.col] = "@";
+            newState.squares[a][b] = "X";
+            children.push(newState);
+          } else {
+            let newState = {
+              squares: state.squares.map(array => array.slice()),
+              p1Location: {
+                row: state.p1Location.row,
+                col: state.p1Location.col
+              },
+              p2Location: { row: a, col: b }
+            };
+
+            newState.squares[playerLocation.row][playerLocation.col] = "@";
+            newState.squares[a][b] = "O";
+            children.push(newState);
+          }
         }
       }
     }
@@ -90,18 +107,23 @@ class AiAgent {
 
   // Minimax search algorithm
   static minimax(currentState, depth, maximizingPlayer) {
-    if (depth == 0 || this.checkGameOver(currentState))
+    if (depth == 0 || this.checkGameOver(currentState)) {
+      console.log("DEPTH 0");
       return this.SEF(currentState);
+    }
 
     // Get all the children states for the currentState
-    const children = this.getChildren(currentState);
-    console.log("ALL CHILDREN");
-    console.log(children);
+    const children = this.getChildren(currentState, maximizingPlayer);
+    // console.log("ALL CHILDREN");
+    // console.log(children);
 
     if (maximizingPlayer) {
       let maxEvaluation = -Infinity;
 
-      children.forEach(child => {
+      children.forEach((child, index) => {
+        console.log(
+          `==============> DEPTH: ${depth} CHILD: ${index} <==============`
+        );
         const evaluation = this.minimax(child, depth - 1, false);
         maxEvaluation = Math.max(maxEvaluation, evaluation);
       });
@@ -109,9 +131,12 @@ class AiAgent {
     } else {
       let minEvaluation = Infinity;
 
-      children.forEach(child => {
+      children.forEach((child, index) => {
+        console.log(
+          `==============> DEPTH: ${depth} CHILD: ${index} <==============`
+        );
         const evaluation = this.minimax(child, depth - 1, true);
-        minEvaluation = (minEvaluation, evaluation);
+        minEvaluation = Math.min(minEvaluation, evaluation);
       });
       return minEvaluation;
     }
@@ -139,7 +164,7 @@ if (
   (state.p1Location.row !== null && state.p1Location.col !== null) ||
   (state.p2Location.row !== null && state.p2Location.col !== null)
 ) {
-  console.log("Minimax result: ", AiAgent.minimax(state, 1, true));
+  console.log("Minimax result: ", AiAgent.minimax(state, 2, true));
 }
 
 // console.log("First State: ", state.squares);
