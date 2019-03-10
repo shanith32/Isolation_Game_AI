@@ -3,31 +3,26 @@ import { Modal, Button, Container, Row, Col } from "react-bootstrap";
 import "./PlayerSelector.css";
 
 class PlayerSelector extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: true
-    };
-  }
-
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
   render() {
     return (
-      <Modal centered size="lg" show={this.state.show}>
+      <Modal centered size="lg" show={this.props.show}>
         <Modal.Body id="modal">
           <Container>
             <Row>
               <Col style={{ display: "flex", justifyContent: "center" }}>
-                <Button className="boxes" onClick={this.handleClose}>
+                <Button
+                  className="boxes"
+                  onClick={() => this.props.onClick(true)}
+                >
                   🤖 <br />
                   AI
                 </Button>
               </Col>
               <Col style={{ display: "flex", justifyContent: "center" }}>
-                <Button className="boxes" onClick={this.handleClose}>
+                <Button
+                  className="boxes"
+                  onClick={() => this.props.onClick(false)}
+                >
                   🧑 <br />
                   You
                 </Button>

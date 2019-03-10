@@ -14,7 +14,8 @@ class Game extends Component {
         .map(() => Array(7).fill(null)),
       p1IsNext: false,
       p1Location: { row: null, col: null },
-      p2Location: { row: null, col: null }
+      p2Location: { row: null, col: null },
+      show: true
     };
   }
 
@@ -111,6 +112,14 @@ class Game extends Component {
     }
   }
 
+  // Function to handle the popup
+  handleShow(p1IsNext) {
+    this.setState({
+      p1IsNext,
+      show: false
+    });
+  }
+
   // Function to move the AI
   moveAi() {
     const { squares, p1Location, p2Location, p1IsNext } = this.state;
@@ -174,7 +183,10 @@ class Game extends Component {
 
     return (
       <div className="game">
-        <PlayerSelector />
+        <PlayerSelector
+          show={this.state.show}
+          onClick={p1IsNext => this.handleShow(p1IsNext)}
+        />
         <div className="game-info">
           <div className="game-name">The Isolation Game</div>
           <span>{status}</span>
