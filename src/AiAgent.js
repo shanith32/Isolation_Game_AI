@@ -43,9 +43,8 @@ class AiAgent {
   // Static Evaluation Function
   static SEF(state) {
     const availableMoves = this.countLegalMoves(state);
-    console.log("Available moves: ", availableMoves);
     const result = availableMoves[0] - availableMoves[1];
-
+    console.log("Available moves:", availableMoves, "SEF score:", result);
     return result;
   }
 
@@ -164,7 +163,7 @@ if (
   (state.p1Location.row !== null && state.p1Location.col !== null) ||
   (state.p2Location.row !== null && state.p2Location.col !== null)
 ) {
-  console.log("Minimax result: ", AiAgent.minimax(state, 2, true));
+  console.log("Minimax result: ", AiAgent.minimax(state, 1, true));
 }
 
 // console.log("First State: ", state.squares);
