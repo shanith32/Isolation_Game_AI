@@ -1,5 +1,6 @@
 /* evenSquare */
 .evenSquare {
+  border-radius: 0px;
   background: #fcee2f86;
   border: 0px;
   float: left;
@@ -8,6 +9,10 @@
   text-align: center;
   width: 70px;
   height: 70px;
+}
+
+.evenSquare:hover {
+  background: #5351db;
 }
 
 .evenSquare:focus {
@@ -20,6 +25,7 @@
 
 /* oddSquare */
 .oddSquare {
+  border-radius: 0px;
   background: #ffffffad;
   border: 0px;
   float: left;
@@ -28,6 +34,10 @@
   text-align: center;
   width: 70px;
   height: 70px;
+}
+
+.oddSquare:hover {
+  background: #5351db;
 }
 
 .oddSquare:focus {
@@ -40,6 +50,7 @@
 
 /* usedSquare */
 .usedSquare {
+  border-radius: 0px;
   background: #ff3437;
   border: 0px;
   float: left;
@@ -47,6 +58,10 @@
   text-align: center;
   width: 70px;
   height: 70px;
+}
+
+.usedSquare:hover {
+  background: #636364;
 }
 
 .usedSquare:focus {

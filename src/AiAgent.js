@@ -39,8 +39,8 @@ class AiAgent {
     const availableMoves = this.countLegalMoves(state);
     let result = false;
 
-    if (!availableMoves[0]) result = "🐴";
-    else if (!availableMoves[1]) result = "🦄";
+    if (!availableMoves[0]) result = "🧑";
+    else if (!availableMoves[1]) result = "🤖";
 
     return result;
   }
@@ -85,7 +85,7 @@ class AiAgent {
             };
 
             newState.squares[playerLocation.row][playerLocation.col] = "@";
-            newState.squares[a][b] = "🦄";
+            newState.squares[a][b] = "🤖";
             children.push(newState);
           } else {
             let newState = {
@@ -98,7 +98,7 @@ class AiAgent {
             };
 
             newState.squares[playerLocation.row][playerLocation.col] = "@";
-            newState.squares[a][b] = "🐴";
+            newState.squares[a][b] = "🧑";
             children.push(newState);
           }
         }
@@ -153,29 +153,3 @@ class AiAgent {
 }
 
 export default AiAgent;
-
-//
-//
-// Test case
-// const state = {
-//   squares: [
-//     ["O", null, null, null, null, null, null],
-//     [null, null, null, null, null, null, null],
-//     [null, null, "X", null, null, null, null],
-//     [null, null, null, null, null, null, null],
-//     [null, null, null, null, null, null, null],
-//     [null, null, null, null, null, null, null],
-//     [null, null, null, null, null, null, null]
-//   ],
-//   p1Location: { row: 2, col: 2 },
-//   p2Location: { row: 0, col: 0 }
-// };
-
-// if (
-//   (state.p1Location.row !== null && state.p1Location.col !== null) ||
-//   (state.p2Location.row !== null && state.p2Location.col !== null)
-// ) {
-//   const newAI = new AiAgent();
-//   // console.log("Minimax result: ", newAI.minimax(state, 1, true));
-//   console.log("Move : ", newAI.getMove(newAI.minimax(state, 1, true)));
-// }

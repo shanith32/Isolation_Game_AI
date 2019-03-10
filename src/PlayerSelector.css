@@ -1,0 +1,13 @@
+#modal {
+  background-image: linear-gradient(#d461df, #d34646);
+}
+
+.boxes {
+  background-image: linear-gradient(#d461df, #d34646);
+  border: 0px;
+  margin: auto;
+  align-content: center;
+  width: 300px;
+  height: 300px;
+  font-size: 80px;
+}

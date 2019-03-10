@@ -1,11 +1,12 @@
 import React from "react";
+import { Button } from "react-bootstrap";
 import "./Square.css";
 
 function Square(props) {
   return (
-    <button className={props.squareColor} onClick={props.onClick}>
+    <Button className={props.squareColor} onClick={props.onClick}>
       {props.value}
-    </button>
+    </Button>
   );
 }
 

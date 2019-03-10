@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Board from "./Board";
+import PlayerSelector from "./PlayerSelector";
 import "./Game.css";
 import { isNull } from "util";
 const AiAgent = require("./AiAgent").default;
@@ -53,8 +54,8 @@ class Game extends Component {
 
     let result = false;
 
-    if (!isAvailable[0]) result = "🐴";
-    else if (!isAvailable[1]) result = "🦄";
+    if (!isAvailable[0]) result = "🧑";
+    else if (!isAvailable[1]) result = "🤖";
 
     return result;
   }
@@ -98,7 +99,7 @@ class Game extends Component {
     )
       return;
     if (!this.state.p1IsNext) {
-      squares[row][col] = "🐴";
+      squares[row][col] = "🧑";
       if (p2Location.row !== null && p2Location.col !== null)
         squares[p2Location.row][p2Location.col] = "@";
 
@@ -141,13 +142,13 @@ class Game extends Component {
         row = p2Location.row;
         col = p2Location.col;
 
-        while (squares[row][col] === "🐴") {
+        while (squares[row][col] === "🧑") {
           row = Math.floor(Math.random() * 7);
           col = Math.floor(Math.random() * 7);
         }
       }
 
-      squares[row][col] = "🦄";
+      squares[row][col] = "🤖";
       if (p1Location.row !== null && p1Location.col !== null)
         squares[p1Location.row][p1Location.col] = "@";
 
@@ -168,14 +169,15 @@ class Game extends Component {
     if (this.state.p1IsNext && !winner) this.moveAi();
 
     let status;
-    if (winner) status = `Winner ${winner}`;
-    else status = `${this.state.p1IsNext ? "🦄" : "🐴"}'s Turn`;
+    if (winner) status = `${winner} WON! 🎉`;
+    else status = "🤖💤";
 
     return (
       <div className="game">
+        <PlayerSelector />
         <div className="game-info">
           <div className="game-name">The Isolation Game</div>
-          <div>{status}</div>
+          <span>{status}</span>
         </div>
         <div className="game-board">
           <Board
