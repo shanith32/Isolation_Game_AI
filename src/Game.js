@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Board from "./Board";
 import "./Game.css";
 import { isNull } from "util";
+const AiAgent = require("./AiAgent").default;
 
 class Game extends Component {
   constructor(props) {
@@ -123,8 +124,34 @@ class Game extends Component {
     }
   }
 
+  // Function to move the AI
+  moveAi() {
+    const newAI = new AiAgent();
+    const move = newAI.getMove(newAI.minimax(this.state, 8, true));
+    if (move) {
+      this.setState({
+        squares: move.state.squares,
+        p1IsNext: !this.state.p1IsNext,
+        p1Location: {
+          row: move.state.p1Location.row,
+          col: move.state.p1Location.col
+        }
+      });
+    } else return;
+  }
+
   render() {
     const winner = this.calculateWinner();
+
+    if (
+      this.state.p1IsNext &&
+      !winner &&
+      ((this.state.p1Location.row !== null &&
+        this.state.p1Location.col !== null) ||
+        (this.state.p2Location.row !== null &&
+          this.state.p2Location.col !== null))
+    )
+      this.moveAi();
 
     let status;
     if (winner) status = `Winner ${winner}`;
