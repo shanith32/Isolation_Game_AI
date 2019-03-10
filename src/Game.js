@@ -31,20 +31,19 @@ class Game extends Component {
 
     for (let j = 0; j < 2; j++) {
       const moves = [
-        [1, playerLocation.row + 2, playerLocation.col + 1],
-        [2, playerLocation.row + 2, playerLocation.col - 1],
-        [3, playerLocation.row - 2, playerLocation.col + 1],
-        [4, playerLocation.row - 2, playerLocation.col - 1],
-        [5, playerLocation.row + 1, playerLocation.col - 2],
-        [6, playerLocation.row - 1, playerLocation.col - 2],
-        [7, playerLocation.row + 1, playerLocation.col + 2],
-        [8, playerLocation.row - 1, playerLocation.col + 2]
+        [playerLocation.row + 2, playerLocation.col + 1],
+        [playerLocation.row + 2, playerLocation.col - 1],
+        [playerLocation.row - 2, playerLocation.col + 1],
+        [playerLocation.row - 2, playerLocation.col - 1],
+        [playerLocation.row + 1, playerLocation.col - 2],
+        [playerLocation.row - 1, playerLocation.col - 2],
+        [playerLocation.row + 1, playerLocation.col + 2],
+        [playerLocation.row - 1, playerLocation.col + 2]
       ];
 
       for (let i = 0; i < moves.length; i++) {
-        const [n, a, b] = moves[i];
+        const [a, b] = moves[i];
         if (a >= 0 && a < 7 && b >= 0 && b < 7) {
-          console.log("n => ", n, " a: ", a, " b: ", b);
           if (isNull(this.state.squares[a][b])) isAvailable[j]++;
         }
       }
@@ -52,7 +51,6 @@ class Game extends Component {
       playerLocation = this.state.p2Location;
     }
 
-    console.log("IsAvailable: ", isAvailable[0], " ", isAvailable[1]);
     let result = false;
 
     if (!isAvailable[0]) result = "🐴";
@@ -91,7 +89,6 @@ class Game extends Component {
   // Function to handle the click on a square
   handleClick(row, col) {
     const { squares } = this.state;
-    const { p1Location } = this.state;
     const { p2Location } = this.state;
 
     if (
@@ -100,18 +97,7 @@ class Game extends Component {
       this.checkIfMoveLegal(row, col)
     )
       return;
-
-    if (this.state.p1IsNext) {
-      squares[row][col] = "🦄";
-      if (p1Location.row !== null && p1Location.col !== null)
-        squares[p1Location.row][p1Location.col] = "@";
-
-      this.setState({
-        squares: squares,
-        p1IsNext: !this.state.p1IsNext,
-        p1Location: { row: row, col: col }
-      });
-    } else {
+    if (!this.state.p1IsNext) {
       squares[row][col] = "🐴";
       if (p2Location.row !== null && p2Location.col !== null)
         squares[p2Location.row][p2Location.col] = "@";
@@ -126,32 +112,48 @@ class Game extends Component {
 
   // Function to move the AI
   moveAi() {
-    const newAI = new AiAgent();
-    const move = newAI.getMove(newAI.minimax(this.state, 8, true));
-    if (move) {
+    const { squares, p1Location, p2Location, p1IsNext } = this.state;
+
+    if (
+      (p1Location.row !== null && p1Location.col !== null) ||
+      (p2Location.row !== null && p2Location.col !== null)
+    ) {
+      const newAI = new AiAgent();
+      const move = newAI.getMove(newAI.minimax(this.state, 8, true));
+      console.log("Move: ", move);
+      if (move) {
+        this.setState({
+          squares: move.state.squares,
+          p1IsNext: !p1IsNext,
+          p1Location: {
+            row: move.state.p1Location.row,
+            col: move.state.p1Location.col
+          }
+        });
+      } else return;
+    } else {
+      const row = Math.floor(Math.random() * 7);
+      const col = Math.floor(Math.random() * 7);
+
+      squares[row][col] = "🦄";
+      if (p1Location.row !== null && p1Location.col !== null)
+        squares[p1Location.row][p1Location.col] = "@";
+
       this.setState({
-        squares: move.state.squares,
-        p1IsNext: !this.state.p1IsNext,
+        squares: squares,
+        p1IsNext: !p1IsNext,
         p1Location: {
-          row: move.state.p1Location.row,
-          col: move.state.p1Location.col
+          row: row,
+          col: col
         }
       });
-    } else return;
+    }
   }
 
   render() {
     const winner = this.calculateWinner();
 
-    if (
-      this.state.p1IsNext &&
-      !winner &&
-      ((this.state.p1Location.row !== null &&
-        this.state.p1Location.col !== null) ||
-        (this.state.p2Location.row !== null &&
-          this.state.p2Location.col !== null))
-    )
-      this.moveAi();
+    if (this.state.p1IsNext && !winner) this.moveAi();
 
     let status;
     if (winner) status = `Winner ${winner}`;

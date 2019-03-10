@@ -11,14 +11,14 @@ class AiAgent {
 
     for (let j = 0; j < 2; j++) {
       const moves = [
-        [1, playerLocation.row + 2, playerLocation.col + 1],
-        [2, playerLocation.row + 2, playerLocation.col - 1],
-        [3, playerLocation.row - 2, playerLocation.col + 1],
-        [4, playerLocation.row - 2, playerLocation.col - 1],
-        [5, playerLocation.row + 1, playerLocation.col - 2],
-        [6, playerLocation.row - 1, playerLocation.col - 2],
-        [7, playerLocation.row + 1, playerLocation.col + 2],
-        [8, playerLocation.row - 1, playerLocation.col + 2]
+        [playerLocation.row + 2, playerLocation.col + 1],
+        [playerLocation.row + 2, playerLocation.col - 1],
+        [playerLocation.row - 2, playerLocation.col + 1],
+        [playerLocation.row - 2, playerLocation.col - 1],
+        [playerLocation.row + 1, playerLocation.col - 2],
+        [playerLocation.row - 1, playerLocation.col - 2],
+        [playerLocation.row + 1, playerLocation.col + 2],
+        [playerLocation.row - 1, playerLocation.col + 2]
       ];
 
       for (let i = 0; i < moves.length; i++) {
