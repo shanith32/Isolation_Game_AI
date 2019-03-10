@@ -11,7 +11,7 @@ class Game extends Component {
       squares: Array(7)
         .fill(null)
         .map(() => Array(7).fill(null)),
-      p1IsNext: true,
+      p1IsNext: false,
       p1Location: { row: null, col: null },
       p2Location: { row: null, col: null }
     };
@@ -115,8 +115,10 @@ class Game extends Component {
     const { squares, p1Location, p2Location, p1IsNext } = this.state;
 
     if (
-      (p1Location.row !== null && p1Location.col !== null) ||
-      (p2Location.row !== null && p2Location.col !== null)
+      p1Location.row !== null &&
+      p1Location.col !== null &&
+      p2Location.row !== null &&
+      p2Location.col !== null
     ) {
       const newAI = new AiAgent();
       const move = newAI.getMove(newAI.minimax(this.state, 8, true));
@@ -132,8 +134,18 @@ class Game extends Component {
         });
       } else return;
     } else {
-      const row = Math.floor(Math.random() * 7);
-      const col = Math.floor(Math.random() * 7);
+      let row = Math.floor(Math.random() * 7);
+      let col = Math.floor(Math.random() * 7);
+
+      if (p2Location.row !== null && p2Location.col !== null) {
+        row = p2Location.row;
+        col = p2Location.col;
+
+        while (squares[row][col] === "🐴") {
+          row = Math.floor(Math.random() * 7);
+          col = Math.floor(Math.random() * 7);
+        }
+      }
 
       squares[row][col] = "🦄";
       if (p1Location.row !== null && p1Location.col !== null)
